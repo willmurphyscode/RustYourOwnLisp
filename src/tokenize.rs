@@ -4,6 +4,7 @@ use opcode::OpCode;
 
 use opcode;
 
+#[derive(Debug)]
 pub enum Token {
     Operation(OpCode),
     Value(i32),
@@ -14,11 +15,6 @@ pub enum Token {
 impl Token {
     pub fn tokenize(input: String) -> Vec<Token> {
         let mut retval : Vec<Token> = vec![];
-
-        let match_number = Regex::new(r"^\d+$").unwrap();
-        let match_open_paren = Regex::new(r"\(").unwrap();
-        let match_close_paren = Regex::new(r"\)").unwrap();
-        let match_opcode = Regex::new(r"[+-*/]").unwrap();
 
         let ary : Vec<&str> = input.split_whitespace().collect();
 
@@ -33,12 +29,13 @@ impl Token {
     pub fn eval(stack: Vec<Token>) -> i32 {
         let mut retval = 0; 
         
-        while let Some(current) = stack.pop() {
-            match current {
-                Token::OpenParen => () 
-            }
+        // while let Some(current) = stack.pop() {
+        //     match current {
+        //         Token::OpenParen => () 
+        //     }
             
-        } 
+        // } 
+        retval
     }
 
     fn make_token(input: &str) -> Token {
@@ -46,7 +43,7 @@ impl Token {
         let match_number = Regex::new(r"^\d+$").unwrap();
         let match_open_paren = Regex::new(r"^\($").unwrap();
         let match_close_paren = Regex::new(r"^\)$").unwrap();
-        let match_opcode = Regex::new(r"^[+-*/]$").unwrap();
+        let match_opcode = Regex::new(r"[-+*/]").unwrap();
 
         if match_number.is_match(input) {
             let number = input.parse::<i32>().expect("Failed with bad number matching regex"); 

@@ -9,8 +9,13 @@ fn main() {
     let c = '+';
     let code = opcode::OpCode::get_opcode(c);
 
-    
+    let input = String::from("+ 2 3");
 
+    let tokens = tokenize::Token::tokenize(input);
+
+    for tok in &tokens {
+        println!("{:?}", tok);
+    }
 
     let char_from_code = match code {
         Some(c) => opcode::OpCode::get_char(c),
