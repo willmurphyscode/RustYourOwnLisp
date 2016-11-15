@@ -1,27 +1,41 @@
 extern crate regex;
 use regex::Regex;
 
+use std::io;
+use std::io::Write;
+
 mod opcode;
 mod tokenize;
+mod scientific_names_regex;
 
 fn main() {
-    println!("Hello, world!");
-    let c = '+';
-    let code = opcode::OpCode::get_opcode(c);
+    println!("Official and reliable scientific names tester, wersion 32 alpha 4..");
 
-    let input = String::from("+ 2 3");
+        //get a reference to stdin 
+    let stdin = io::stdin();
 
-    let tokens = tokenize::Token::tokenize(input);
+    //create a mutable string to hold what the user types. 
+    let mut buffer = String::new();
 
-    for tok in &tokens {
-        println!("{:?}", tok);
-    }
+    loop { 
+        println!("Enter a string to test");
+        print!(">>>");
 
-    let char_from_code = match code {
-        Some(c) => opcode::OpCode::get_char(c),
-        None => ' '  
-    };
+        //manually flush stdout so that ">>>" prompt appears 
+        io::stdout().flush().expect("Could not flush stdout. Panic!");
+   
+        stdin.read_line(&mut buffer).expect("Could not read stdin. Panic!");
 
-    println!("Opcode was {:?}", code);
-    println!("Returned char was {}", char_from_code);
+        let is_name = scientific_names_regex::is_scientific_name(&buffer); 
+        if is_name {
+            println!("That is a decent scientific name. $3, please.");
+        } else {
+            println!("That is a terrible name. Try again.");
+        }
+
+       
+
+        //clear the input string; only echo the most recent input. 
+        buffer.clear();
+    }   
 }
