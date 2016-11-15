@@ -6,3 +6,4 @@ Posts:
 2. A name game (echo user input back to user)
 3. Parsing "Scientific Names" (adjective, cool science noun, onomatopoeia) 
 4. Parsing simple arithmetic strings, using a parser/combinator library. (use nom) 
+
