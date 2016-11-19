@@ -28,49 +28,50 @@ struct Expression {
     sound: CoolSound
 }
 
-named!(cool_name <CoolName>, map_res!(
+named!(cool_name <&str>, 
   map_res!(
     recognize!(
       alt!(
-        "space" | "time" | "matter" | "energy"
+        tag!("space") | tag!("time") | tag!("matter") | tag!("energy")
       )
     ),
     str::from_utf8
-  ),
-  FromStr::from_str
+  ));
+
+named!(cool_adjective <&str> , map_res!(
+  recognize!(complete!(
+  alt!(
+        tag!("horrendous") | tag!("ultimate") | tag!("gargantuan")
+  )) ),
+  str::from_utf8
+));
+
+named!(space_or_comma <&str>, map_res!( alt!(tag!(" ") | tag!(", ")), str::from_utf8));
+
+named!(read_adjective <&str>, map_res!(
+  recognize!(separated_list!(space_or_comma, cool_adjective)),
+  str::from_utf8
 ));
 
 
-named!(float <f32>, map!(
-  pair!(
-    opt!(alt!(tag!("+") | tag!("-"))),
-    unsigned_float
-  ),
-  |(sign, value): (Option<&[u8]>, f32)| {
-    sign.and_then(|s| if s[0] == ('-' as u8) { Some(-1f32) } else { None }).unwrap_or(1f32) * value
-  }
-));
-
-
+named!(adjectives < Vec<&str> >, many1!(read_adjective)); 
 
 #[test]
-
-fn adjective_test() {
-    
-  assert_eq!(unsigned_float(&b"123.456"[..]), IResult::Done(&b""[..], 123.456));
-
+fn cool_name_test() {
+  assert_eq!(cool_name(&b"space"[..]), IResult::Done(&b""[..], "space")); 
 }
 
-
+#[test]
+fn cool_adjective_test() {
+  assert_eq!(cool_adjective(&b"horrendous"[..]), IResult::Done(&b""[..], "horrendous"));
+  assert_eq!(cool_adjective(&b"ultimate"[..]), IResult::Done(&b""[..], "ultimate"));
+  assert_eq!(cool_adjective(&b"gargantuan"[..]), IResult::Done(&b""[..], "gargantuan"));
+}
 
 #[test]
-
-fn float_test() {
-
-  assert_eq!(float(&b"123.456"[..]),  IResult::Done(&b""[..], 123.456));
-
-  assert_eq!(float(&b"+123.456"[..]), IResult::Done(&b""[..], 123.456));
-
-  assert_eq!(float(&b"-123.456"[..]), IResult::Done(&b""[..], -123.456));
-
+fn adjectives_test() {
+  let res = IResult::Done(&b""[..], vec!["horrendous", "ultimate", "gargantuan"]);
+  let foo = adjectives(&b" horrendous, ultimate, gargantuan"[..]); 
+  println!("{:?}", foo);
+  assert_eq!(adjectives(&b"horrendous, ultimate, gargantuan"[..]), res);
 }
