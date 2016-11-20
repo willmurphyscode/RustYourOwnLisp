@@ -38,18 +38,17 @@ named!(cool_name <&str>,
     str::from_utf8
   ));
 
-named!(cool_adjective <&str> , map_res!(
+named!(cool_adjective, 
   recognize!(complete!(
   alt!(
         tag!("horrendous") | tag!("ultimate") | tag!("gargantuan")
-  )) ),
-  str::from_utf8
-));
+  )) )
+);
 
 named!(space_or_comma <&str>, map_res!( alt!(tag!(" ") | tag!(", ")), str::from_utf8));
 
 named!(read_adjective <&str>, map_res!(
-  recognize!(separated_list!(space_or_comma, cool_adjective)),
+  delimited!(space_or_comma, cool_adjective, space_or_comma),
   str::from_utf8
 ));
 
@@ -63,9 +62,9 @@ fn cool_name_test() {
 
 #[test]
 fn cool_adjective_test() {
-  assert_eq!(cool_adjective(&b"horrendous"[..]), IResult::Done(&b""[..], "horrendous"));
-  assert_eq!(cool_adjective(&b"ultimate"[..]), IResult::Done(&b""[..], "ultimate"));
-  assert_eq!(cool_adjective(&b"gargantuan"[..]), IResult::Done(&b""[..], "gargantuan"));
+  assert_eq!(cool_adjective(&b"horrendous"[..]), IResult::Done(&b""[..], &b"horrendous"[..]));
+  assert_eq!(cool_adjective(&b"ultimate"[..]), IResult::Done(&b""[..], &b"ultimate"[..]));
+  assert_eq!(cool_adjective(&b"gargantuan"[..]), IResult::Done(&b""[..], &b"gargantuan"[..]));
 }
 
 #[test]
