@@ -1,0 +1,14 @@
+use std::str::FromStr;
+
+use name_types::CoolAdjective;
+
+grammar;
+
+
+pub CoolAdjective : CoolAdjective = {
+  <listItem:CoolAdjective> ", " => listItem,  
+  "horrendous" => CoolAdjective::Horrendous,
+  "stupendous" => CoolAdjective::Stupendous,
+  "gargantuan" => CoolAdjective::Gargantuan,
+  "ultimate" => CoolAdjective::Ultimate,
+};

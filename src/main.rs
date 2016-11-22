@@ -5,23 +5,15 @@ use name_types::CoolAdjective;
 mod opcode;
 mod tokenize;
 
-pub mod ints; 
-
 pub mod scientific_names;
 pub mod name_types;
 
-#[test]
-fn calculator1() {
-    assert!(ints::parse_Term("22").is_ok());
-    assert!(ints::parse_Term("(22)
-    ").is_ok());
-    assert!(ints::parse_Term("((((22))))").is_ok());
-    assert!(ints::parse_Term("((22)").is_err());
-}
 
 #[test]
 fn cool_adjective_test() {
-    assert!(scientific_names::parse_coolAdjective("horrendous").is_ok());
+    assert!(scientific_names::parse_CoolAdjective(&"horrendous").is_ok());
+    assert!(scientific_names::parse_CoolAdjective(&"horrendous, ").is_ok());
+    assert_eq!(scientific_names::parse_CoolAdjective(&"gargantuan").unwrap(), CoolAdjective::Gargantuan);
 }
 
 fn main() {
