@@ -32,6 +32,8 @@ pub FinalNoun : FinalNoun = {
 
 pub AdjectiveList : Vec<Box<CoolAdjective>> = Comma<CoolAdjective>;
 
+//comma parser taken from LALRPOP tutorial:
+//https://github.com/nikomatsakis/lalrpop/blob/master/doc/tutorial.md#calculator5
 Comma<T>: Vec<T> = { // (1)
     <v:(<T> ", ")*> <e:T?> => match e { // (2)
         None => v,
