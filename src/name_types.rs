@@ -7,3 +7,28 @@ pub enum CoolAdjective {
    Gargantuan,
    Ultimate
 }
+
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum CoolNoun {
+    Space,
+    Time,
+    Matter,
+    Energy,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum FinalNoun {
+    Kablooie,
+    Swoosh,
+    Frobber,
+    Atomizer,
+    Event,
+    Device
+}
+
+
+
+
+
+

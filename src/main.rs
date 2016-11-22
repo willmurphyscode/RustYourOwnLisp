@@ -16,6 +16,23 @@ fn cool_adjective_test() {
     assert_eq!(scientific_names::parse_CoolAdjective(&"gargantuan").unwrap(), CoolAdjective::Gargantuan);
 }
 
+#[test]
+fn cool_noun_test() {
+    assert_eq!(scientific_names::parse_CoolNoun(&"space").unwrap(), name_types::CoolNoun::Space);
+}
+
+#[test]
+fn final_noun_test() {
+    assert_eq!(scientific_names::parse_FinalNoun(&"device").unwrap(), name_types::FinalNoun::Device);
+}
+
+#[test]
+fn adjective_list_test() {
+    let expected = true; 
+    let actual = scientific_names::parse_AdjectiveList(&"horrendous, gargantuan").is_ok();
+    assert_eq!(expected, actual);
+}
+
 fn main() {
     println!("Hello, world!");
     let c = '+';
