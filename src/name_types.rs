@@ -27,7 +27,12 @@ pub enum FinalNoun {
     Device
 }
 
-
+#[derive(Debug,PartialEq)]
+pub struct ScientificName {
+    pub adjective_list : Vec<Box<CoolAdjective>>,
+    pub cool_noun : CoolNoun,
+    pub final_noun : FinalNoun,
+}
 
 
 

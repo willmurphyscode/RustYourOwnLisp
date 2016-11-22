@@ -1,16 +1,15 @@
 use std::str::FromStr;
 
-use name_types::{CoolAdjective, CoolNoun, FinalNoun};
+use name_types::{CoolAdjective, CoolNoun, FinalNoun, ScientificName};
 
 grammar;
 
 
-pub CoolAdjective : CoolAdjective = {
-  <listItem:CoolAdjective> ", " => listItem,  
-  "horrendous" => CoolAdjective::Horrendous,
-  "stupendous" => CoolAdjective::Stupendous,
-  "gargantuan" => CoolAdjective::Gargantuan,
-  "ultimate" => CoolAdjective::Ultimate,
+pub CoolAdjective : Box<CoolAdjective> = {
+  "horrendous" => Box::new(CoolAdjective::Horrendous),
+  "stupendous" => Box::new(CoolAdjective::Stupendous),
+  "gargantuan" => Box::new(CoolAdjective::Gargantuan),
+  "ultimate" => Box::new(CoolAdjective::Ultimate),
 };
 
 
@@ -31,15 +30,21 @@ pub FinalNoun : FinalNoun = {
    "device" => FinalNoun::Device,
 };
 
-// pub AdjectiveList : Vec<Box<CoolAdjective>> = Comma<CoolAdjective>;
+pub AdjectiveList : Vec<Box<CoolAdjective>> = Comma<CoolAdjective>;
 
-// Comma<T>: Vec<T> = { // (1)
-//     <v:(<T> ",")*> <e:T?> => match e { // (2)
-//         None => v,
-//         Some(e) => {
-//             let mut v = v;
-//             v.push(e);
-//             v
-//         }
-//     }
-// };
+Comma<T>: Vec<T> = { // (1)
+    <v:(<T> ", ")*> <e:T?> => match e { // (2)
+        None => v,
+        Some(e) => {
+            let mut v = v;
+            v.push(e);
+            v
+        }
+    }
+};
+
+pub ScientificName : ScientificName = {
+  <a:AdjectiveList> <c:CoolNoun> <f:FinalNoun> => ScientificName {
+    adjective_list : a, cool_noun: c, final_noun: f
+  }
+};

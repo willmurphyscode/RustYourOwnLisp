@@ -12,13 +12,13 @@ pub mod name_types;
 #[test]
 fn cool_adjective_test() {
     assert!(scientific_names::parse_CoolAdjective(&"horrendous").is_ok());
-    assert!(scientific_names::parse_CoolAdjective(&"horrendous, ").is_ok());
-    assert_eq!(scientific_names::parse_CoolAdjective(&"gargantuan").unwrap(), CoolAdjective::Gargantuan);
+    assert_eq!(scientific_names::parse_CoolAdjective(&"gargantuan").unwrap(), Box::new(CoolAdjective::Gargantuan));
 }
 
 #[test]
 fn cool_noun_test() {
     assert_eq!(scientific_names::parse_CoolNoun(&"space").unwrap(), name_types::CoolNoun::Space);
+    assert_eq!(scientific_names::parse_CoolNoun(&"energy").unwrap(), name_types::CoolNoun::Energy);
 }
 
 #[test]
@@ -30,6 +30,18 @@ fn final_noun_test() {
 fn adjective_list_test() {
     let expected = true; 
     let actual = scientific_names::parse_AdjectiveList(&"horrendous, gargantuan").is_ok();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn test_scientific_names() {
+    let expected = name_types::ScientificName{
+        adjective_list : vec![Box::new(CoolAdjective::Horrendous), Box::new(CoolAdjective::Gargantuan)],
+        cool_noun : name_types::CoolNoun::Energy,
+        final_noun : name_types::FinalNoun::Device,
+    };
+    let input = "horrendous, gargantuan energy device";
+    let actual = scientific_names::parse_ScientificName(&input).unwrap();
     assert_eq!(expected, actual);
 }
 
