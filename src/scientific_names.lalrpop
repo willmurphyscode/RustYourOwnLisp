@@ -31,15 +31,15 @@ pub FinalNoun : FinalNoun = {
    "device" => FinalNoun::Device,
 };
 
-pub AdjectiveList : Vec<Box<CoolAdjective>> = Comma<CoolAdjective>;
+// pub AdjectiveList : Vec<Box<CoolAdjective>> = Comma<CoolAdjective>;
 
-Comma<T>: Vec<T> = { // (1)
-    <v:(<T> ",")*> <e:T?> => match e { // (2)
-        None => v,
-        Some(e) => {
-            let mut v = v;
-            v.push(e);
-            v
-        }
-    }
-};
+// Comma<T>: Vec<T> = { // (1)
+//     <v:(<T> ",")*> <e:T?> => match e { // (2)
+//         None => v,
+//         Some(e) => {
+//             let mut v = v;
+//             v.push(e);
+//             v
+//         }
+//     }
+// };
