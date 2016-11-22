@@ -24,6 +24,22 @@ As a reminder, a scientific name, in the Calvin & Hobbes style, is:
 We're going to code our list of cool adjectives, sciency nouns, and onomatopoeias explicitly. In other words, rather than write a function that takes an 
 adjective and assesses whether it's "cool," we're just going to type up a list of cool adjectives. Hey, get with the times. 
 
+The cool thing about LALRPOP is that the definition of the language can be *declarative* rather than *imperative*. In other 
+words, I get to type up a definition of the result that I want, and then let the computer figure out how to get there. I have 
+to files, one is a .rs file that has the definitions of my types, and the other is the .lalrpop file, which lalrpop will turn
+into a .rs that parses strings into the types I'm interested in. 
 
+Here's a short sample of each:
 
+https://gist.github.com/willmurphyscode/da2268ce07343d58e8820dd42e38060f
+
+This will be much easier to maintain and more readable than the regex example from last time. 
+
+Next time, we'll talk about how to handle the "One or more cool adjective" part of our language spec, and I'll talk 
+a bit about organizing a rust project, and some of the confusion I had with the type system and project system. After that,
+we should be ready to build parts of an actual Lisp interpreter. 
+
+Till next time, happy learning.
+
+-Will
 
