@@ -23,6 +23,32 @@ fn test_f64_parse() {
 
 }
 
+#[test]
+fn test_values() {
+    let expected = vec![2f64, 4f64];
+    let actual = s_expression::parse_Values(&"2 4").unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn test_s_expression_parse() {
+    let expected = opcode::SExpression::op(
+        opcode::Operation { opcode: opcode::OpCode::Add, values: vec![1f64,2f64] }
+    );
+    let input = &"( + 1 2)";
+    let actual = s_expression::parse_SExpression(input).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn test_s_expression_eval() {
+    let expected = 4f64; 
+    let input = &"(+ 2 2)";
+    let s = s_expression::parse_SExpression(input).unwrap();
+    let actual = s.eval();
+    assert_eq!(expected, actual);
+}
+
 fn main() {
 
 }
