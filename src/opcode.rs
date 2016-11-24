@@ -27,3 +27,15 @@ impl OpCode {
     }
 
 }
+
+#[derive(Debug, Clone)]
+pub struct Operation {
+   pub opcode : OpCode,
+   pub values : Vec<f64>
+}
+
+#[derive(Debug, Clone)]
+pub enum SExpression {
+    atomic(f64),
+    op(Operation)
+}

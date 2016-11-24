@@ -1,68 +1,28 @@
 extern crate regex;
 use regex::Regex;
-use name_types::CoolAdjective; 
 
-mod opcode;
-mod tokenize;
-
-pub mod scientific_names;
-pub mod name_types;
-
+mod s_expression; 
+pub mod opcode;
 
 #[test]
-fn cool_adjective_test() {
-    assert!(scientific_names::parse_CoolAdjective(&"horrendous").is_ok());
-    assert_eq!(scientific_names::parse_CoolAdjective(&"gargantuan").unwrap(), Box::new(CoolAdjective::Gargantuan));
-}
+fn test_f64_parse() {
+    let expected = -1.234f64;
+    let actual = s_expression::parse_Num(&"-1.234").unwrap();
 
-#[test]
-fn cool_noun_test() {
-    assert_eq!(scientific_names::parse_CoolNoun(&"space").unwrap(), name_types::CoolNoun::Space);
-    assert_eq!(scientific_names::parse_CoolNoun(&"energy").unwrap(), name_types::CoolNoun::Energy);
-}
-
-#[test]
-fn final_noun_test() {
-    assert_eq!(scientific_names::parse_FinalNoun(&"device").unwrap(), name_types::FinalNoun::Device);
-}
-
-#[test]
-fn adjective_list_test() {
-    let expected = true; 
-    let actual = scientific_names::parse_AdjectiveList(&"horrendous, gargantuan").is_ok();
     assert_eq!(expected, actual);
-}
+    
+    let expected_positive_whole = 3f64; 
+    let actual_positive_whole = s_expression::parse_Num(&"3").unwrap();
 
-#[test]
-fn test_scientific_names() {
-    let expected = name_types::ScientificName{
-        adjective_list : vec![Box::new(CoolAdjective::Horrendous), Box::new(CoolAdjective::Gargantuan)],
-        cool_noun : name_types::CoolNoun::Energy,
-        final_noun : name_types::FinalNoun::Device,
-    };
-    let input = "horrendous, gargantuan energy device";
-    let actual = scientific_names::parse_ScientificName(&input).unwrap();
-    assert_eq!(expected, actual);
+    assert_eq!(expected_positive_whole, actual_positive_whole);
+
+    let expected_negative_whole = -7f64;
+    let actual_negative_whole = s_expression::parse_Num(&"-7").unwrap();
+
+    assert_eq!(expected_negative_whole, actual_negative_whole);
+
 }
 
 fn main() {
-    println!("Hello, world!");
-    let c = '+';
-    let code = opcode::OpCode::get_opcode(c);
 
-    let input = String::from("+ 2 3");
-
-    let tokens = tokenize::Token::tokenize(input);
-
-    for tok in &tokens {
-        println!("{:?}", tok);
-    }
-
-    let char_from_code = match code {
-        Some(c) => opcode::OpCode::get_char(c),
-        None => ' '  
-    };
-
-    println!("Opcode was {:?}", code);
-    println!("Returned char was {}", char_from_code);
 }

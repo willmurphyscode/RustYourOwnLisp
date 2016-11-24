@@ -1,0 +1,33 @@
+use std::str::FromStr;
+use opcode;
+
+grammar; 
+
+pub SExpression : opcode::SExpression = {
+    Num => opcode::SExpression::atomic(<>),
+    "(" <o:OpCode> <v:Values> ")" => opcode::SExpression::op(
+        opcode::Operation{ opcode : o, values : v }
+    )
+};
+
+Values = Space<Num>;
+
+Space<T>: Vec<T> = { // (1)
+    <v:(<T> " ")*> <e:T?> => match e { // (2)
+        None => v,
+        Some(e) => {
+            let mut v = v;
+            v.push(e);
+            v
+        }
+    }
+};
+
+pub Num : f64 = r"((-)|(\+))?[0-9]+\.?[0-9]*" => f64::from_str(<>).unwrap();
+
+pub OpCode : opcode::OpCode =  {
+    "+" => opcode::OpCode::Add,
+    "-" => opcode::OpCode::Subtract,
+    "*" => opcode::OpCode::Multiply,
+    "/" => opcode::OpCode::Divide,
+};
