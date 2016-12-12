@@ -1,8 +1,10 @@
 extern crate regex;
 use regex::Regex;
 
+
+//mod s_expression_types;
 mod s_expression; 
-pub mod opcode;
+mod opcode;
 
 #[test]
 fn test_f64_parse() {

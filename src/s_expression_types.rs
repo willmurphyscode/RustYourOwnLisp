@@ -5,7 +5,8 @@ enum S_Expression {
 
 enum Atom {
     Opcode(OpCode),
-    Value(f32)
+    Value(f32),
+    Nil
 }
 
 struct Pair {
@@ -20,3 +21,12 @@ enum OpCode {
     Divide
 }
 
+impl S_Expression {
+    pub fn eval(&mut self, &mut Box<f32> accumulator) {
+        match(self) {
+            Atom(a) => match(a) {
+                
+            }
+        }
+    }
+}

@@ -1,3 +1,4 @@
+use std::rc::Rc;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum OpCode {
@@ -31,7 +32,7 @@ impl OpCode {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Operation {
    pub opcode : OpCode,
-   pub values : Vec<f64>
+   pub values : Vec<Rc<SExpression>>
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -40,16 +41,30 @@ pub enum SExpression {
     op(Operation)
 }
 
+impl Operation {
+    pub fn eval(&self) -> f64 {
+        match self.opcode {
+            OpCode::Add => {
+                let mut result = 0f64; 
+                for boxed_s_expr in self.values.iter() {
+                    let current = Rc::try_unwrap(boxed_s_expr).expect("oops");
+                    // let temp : f64 = current.eval();
+                    // result = result + temp; 
+                }
+                result
+            }
+            _ => unimplemented!()
+        }
+    }
+}
+
 impl SExpression {
     pub fn eval(&self) -> f64 {
-        match *self {
-            SExpression::atomic(f) => f,
-            SExpression::op(ref operation) => {
-                match operation.opcode {
-                    OpCode::Add => operation.values.iter().fold(0f64, |sum, &val| sum + val),
-                    OpCode::Subtract => operation.values.iter().fold(0f64, |diff, &val| diff - val),
-                    _ => unimplemented!()
-                }
+        match self {
+            &SExpression::atomic(val) => val,
+            &SExpression::op(operation) => {
+                let my_op = operation.clone();
+                my_op.eval() 
             }
         }
     } 

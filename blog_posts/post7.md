@@ -34,3 +34,7 @@ pair of vertices."
 
 //s_expression_types.rs goes Here
 
+
+That all looks fine. The other thing I'd like is to be able to invoke "evaluate" on the root of a tree and have 
+that tree do all the math and return a number. This part will be a little tricky because Rust is so concerned with 
+memory safety, we'll have to persuade the compiler that we're allowed to do this. So here it goes. 
