@@ -41,10 +41,10 @@ pub enum SExpression {
     op(Operation)
 }
 
-struct Visitor; 
+pub struct Visitor; 
 
 impl Visitor {
-    fn visit_s_expression(exp : &SExpression) -> f64 {
+    pub fn visit_s_expression(exp : &SExpression) -> f64 {
         match *exp {
             SExpression::atomic(val) => val,
             SExpression::op(ref operation) => {
@@ -53,7 +53,18 @@ impl Visitor {
                         let floats: Vec<_> = operation.values.iter().map(|val| Visitor::visit_s_expression(&val)).collect(); 
                         floats.iter().fold(0f64, |sum, x| sum + x)
                     },
-                    _ => unimplemented!()
+                    OpCode::Subtract => {
+                        let floats: Vec<_> = operation.values.iter().map(|val| Visitor::visit_s_expression(&val)).collect(); 
+                        floats.iter().fold(0f64, |diff, x| diff - x)
+                    },
+                    OpCode::Multiply => {
+                        let floats: Vec<_> = operation.values.iter().map(|val| Visitor::visit_s_expression(&val)).collect(); 
+                        floats.iter().fold(1f64, |prod, x| prod * x)
+                    },
+                    OpCode::Divide => {
+                        let floats: Vec<_> = operation.values.iter().map(|val| Visitor::visit_s_expression(&val)).collect(); 
+                        floats.iter().fold(1f64, |div, x| div / x)
+                    }
 
                 }
             }
