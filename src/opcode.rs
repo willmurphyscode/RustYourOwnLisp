@@ -32,7 +32,7 @@ impl OpCode {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Operation {
    pub opcode : OpCode,
-   pub values : Vec<Rc<SExpression>>
+   pub values : Vec<Box<SExpression>>
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -41,33 +41,22 @@ pub enum SExpression {
     op(Operation)
 }
 
-impl Operation {
-    pub fn eval(&self) -> f64 {
-        match self.opcode {
-            OpCode::Add => {
-                let mut result = 0f64; 
-                for boxed_s_expr in self.values.iter() {
-                    let current = Rc::try_unwrap(boxed_s_expr).expect("oops");
-                    // let temp : f64 = current.eval();
-                    // result = result + temp; 
+struct Visitor; 
+
+impl Visitor {
+    fn visit_s_expression(exp : &SExpression) -> f64 {
+        match *exp {
+            SExpression::atomic(val) => val,
+            SExpression::op(ref operation) => {
+                match operation.opcode {
+                    OpCode::Add => {
+                        let floats: Vec<_> = operation.values.iter().map(|val| Visitor::visit_s_expression(&val)).collect(); 
+                        floats.iter().fold(0f64, |sum, x| sum + x)
+                    },
+                    _ => unimplemented!()
+
                 }
-                result
             }
-            _ => unimplemented!()
         }
     }
-}
-
-impl SExpression {
-    pub fn eval(&self) -> f64 {
-        match self {
-            &SExpression::atomic(val) => val,
-            &SExpression::op(operation) => {
-                let my_op = operation.clone();
-                my_op.eval() 
-            }
-        }
-    } 
-
-
 }

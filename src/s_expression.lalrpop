@@ -8,7 +8,7 @@ pub SExpression : opcode::SExpression = {
     Num => opcode::SExpression::atomic(<>),
     "(" <o:OpCode> <v:Values> ")" => { 
         let mut vals = v.iter()
-            .map(|item| Rc::new(item.clone()))
+            .map(|item| Box::new(item.clone()))
             .collect(); 
         opcode::SExpression::op(
         opcode::Operation{ 
